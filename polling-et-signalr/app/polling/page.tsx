@@ -11,25 +11,29 @@ export default function Home() {
 
   useEffect(() => {
     updateTasks();
+
   }, []);
 
-  function handleTaskAdd(taskName: string) {
+  async function handleTaskAdd(taskName: string) {
     // TODO On invoke la méthode pour ajouter une tâche sur le serveur (Contrôleur d'API)
+   const response = await axios.get("https://localhost:7289/api/UselessTasks/Add/"+ taskName)
+   console.log(response.data)
   }
 
-  function onTaskToggle(id: number) {
+  async function onTaskToggle(id: number) {
     // TODO On invoke la méthode pour compléter une tâche sur le serveur (Contrôleur d'API)
-
+   const response = await axios.get("https://localhost:7289/api/UselessTasks/Complete/"+ id)
+   console.log(response.data)
+   
     let tasksCopy : UselessTask[] = [...tasks];    
     tasksCopy.find(task => task.id === id)!.completed = true;
     setTasks(tasksCopy);
   }
 
   async function updateTasks() {
-    let testTasks = new Array<UselessTask>(
-      { id: 1, text: "Test Task 1", completed: false },
-      { id: 2, text: "Test Task 2", completed: true });
-    setTasks(testTasks);
+   const response = await axios.get("https://localhost:7289/api/UselessTasks/GetAll")
+   console.log(response.data);
+   setTasks(response.data)
     // TODO: Faire une première implémentation simple avec un appel au serveur pour obtenir la liste des tâches
     // TODO: UNE FOIS QUE VOUS AVEZ TESTER AVEC DEUX CLIENTS: Utiliser le polling pour mettre la liste de tasks à jour chaque seconde
   }
