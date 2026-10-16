@@ -9,10 +9,17 @@ export default function Home() {
 
   const [tasks, setTasks] = React.useState<UselessTask[]>([]);
 
-  useEffect(() => {
+ useEffect(() => {
     updateTasks();
 
-  }, []);
+    const interval = setInterval(() => {
+        updateTasks();
+    }, 1000);
+
+    return () => {
+        clearInterval(interval);
+    };
+}, []);
 
   async function handleTaskAdd(taskName: string) {
     // TODO On invoke la méthode pour ajouter une tâche sur le serveur (Contrôleur d'API)
